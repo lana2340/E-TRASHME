@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Gambar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .gallery-item {
+            flex: 1 1 calc(33.333% - 20px);
+            max-width: calc(33.333% - 20px);
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #fff;
+            text-align: center;
+            padding: 15px;
+        }
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .gallery-item p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            .gallery-item {
+                flex: 1 1 calc(50% - 20px);
+                max-width: calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-item {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-center">Galeri Gambar</h1>
+    <div class="gallery-container" id="gallery"></div>
+
+    <script>
+        async function loadGallery() {
+            try {
+                const response = await fetch("get_articles.php");
+                const result = await response.json();
+
+                if (result.success) {
+                    const galleryContainer = document.getElementById("gallery");
+                    galleryContainer.innerHTML = "";
+
+                    result.images.forEach(image => {
+                        const item = document.createElement("div");
+                        item.classList.add("gallery-item");
+                        item.innerHTML = `
+                            <img src="uploads/${image.image}" alt="Gambar">
+                            <p>${image.description}</p>
+                        `;
+                        galleryContainer.appendChild(item);
+                    });
+                } else {
+                    document.getElementById("gallery").innerText = "Gagal memuat galeri: " + result.message;
+                }
+            } catch (error) {
+                document.getElementById("gallery").innerText = "Terjadi kesalahan: " + error.message;
+            }
+        }
+
+        // Panggil fungsi loadGallery saat halaman dimuat
+        loadGallery();
+    </script>
+</body>
+</html>

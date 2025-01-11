@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Tambah Artikel & Gambar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin - Tambah Artikel & Gambar</h1>
+    <div class="form-container">
+        <h3>Upload Artikel</h3>
+        <form id="uploadArticleForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Judul Artikel</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Isi Artikel</label>
+                <textarea id="content" name="content" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Gambar Artikel</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="submit">Upload Artikel</button>
+            </div>
+        </form>
+
+        <h3>Upload Gambar</h3>
+        <form id="uploadImageForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="description">Deskripsi</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Pilih Gambar</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Upload Gambar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("uploadArticleForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append("action", "upload_article");
+            const response = await fetch("upload_article.php", { method: "POST", body: formData });
+            const result = await response.json();
+            alert(result.message);
+        });
+
+        document.getElementById("uploadImageForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            formData.append("action", "upload_image");
+            const response = await fetch("upload_article.php", { method: "POST", body: formData });
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+</body>
+</html>
